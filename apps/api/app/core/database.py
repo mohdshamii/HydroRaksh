@@ -8,12 +8,17 @@ logger = logging.getLogger("jalsuraksha.database")
 
 db_url = settings.DATABASE_URL
 
-# Test if PostgreSQL driver is available, otherwise fallback to SQLite for local development
+# Test if PostgreSQL driver is available and connection can be established, otherwise fallback to SQLite
 if db_url.startswith("postgresql"):
     try:
         import psycopg2  # type: ignore
-    except ImportError:
-        logger.warning("PostgreSQL driver (psycopg2) not detected in environment. Using SQLite fallback for local development.")
+        # Attempt quick probe connection
+        test_engine = create_engine(db_url, connect_args={"connect_timeout": 3})
+        with test_engine.connect() as conn:
+            pass
+        test_engine.dispose()
+    except Exception as e:
+        logger.warning(f"PostgreSQL probe failed ({e}). Gracefully falling back to SQLite for tests/offline environment.")
         db_url = "sqlite:///./jalsuraksha_local.db"
 
 is_sqlite = db_url.startswith("sqlite")

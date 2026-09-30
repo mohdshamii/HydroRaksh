@@ -1,6 +1,12 @@
 from typing import Optional
 from datetime import datetime
-from pydantic import BaseModel, EmailStr, Field
+from pydantic import BaseModel, Field
+
+try:
+    import email_validator  # type: ignore
+    from pydantic import EmailStr
+except ImportError:
+    EmailStr = str  # type: ignore
 
 
 class LoginRequest(BaseModel):

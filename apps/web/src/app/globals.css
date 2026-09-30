@@ -3,82 +3,153 @@
 @tailwind utilities;
 
 :root {
-  --foreground-rgb: 23, 43, 77;
-  --background-rgb: 244, 247, 250;
+  --font-inter: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-playfair: "Playfair Display", "Merriweather", "Cinzel", Georgia, serif;
+  
+  /* Dark-first defaults (RGB triplet format for Tailwind alpha channel support) */
+  --bg-canvas-rgb: 15 23 42;       /* #0f172a slate-900 */
+  --bg-card-rgb: 30 41 59;         /* #1e293b slate-800 */
+  --bg-elevated-rgb: 39 53 73;     /* #273549 slate-750 */
+  --bg-subtle-rgb: 24 34 52;       /* #182234 */
+  --text-primary-rgb: 248 250 252; /* #f8fafc slate-50 */
+  --text-muted-rgb: 148 163 184;   /* #94a3b8 slate-400 */
+  --text-faint-rgb: 100 116 139;   /* #64748b slate-500 */
+  --border-color-rgb: 51 65 85;    /* #334155 slate-700 */
+
+  --bg-canvas: #0f172a;
+  --bg-card: #1e293b;
+  --bg-elevated: #273549;
+  --text-primary: #f8fafc;
+  --text-muted: #94a3b8;
+  --border-color: #334155;
+  --accent-saffron: #f59e0b;
+}
+
+.light {
+  /* Crisp, high-contrast light theme */
+  --bg-canvas-rgb: 248 250 252;    /* #f8fafc slate-50 */
+  --bg-card-rgb: 255 255 255;      /* #ffffff pure white */
+  --bg-elevated-rgb: 241 245 249;  /* #f1f5f9 slate-100 */
+  --bg-subtle-rgb: 226 232 240;    /* #e2e8f0 slate-200 */
+  --text-primary-rgb: 15 23 42;    /* #0f172a slate-900 */
+  --text-muted-rgb: 71 85 105;     /* #475569 slate-600 */
+  --text-faint-rgb: 100 116 139;   /* #64748b slate-500 */
+  --border-color-rgb: 203 213 225; /* #cbd5e1 slate-300 */
+
+  --bg-canvas: #f8fafc;
+  --bg-card: #ffffff;
+  --bg-elevated: #f1f5f9;
+  --text-primary: #0f172a;
+  --text-muted: #475569;
+  --border-color: #cbd5e1;
+  --accent-saffron: #d97706;
+}
+
+.light .district-shape {
+  stroke: rgba(15, 23, 42, 0.22);
+}
+
+.light ::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+}
+
+.light ::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+.light input[type="range"].time-slider {
+  background: #cbd5e1;
+}
+
+.light input[type="range"].time-slider::-webkit-slider-thumb {
+  border-color: #ffffff;
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: rgb(var(--background-rgb));
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  color: var(--text-primary);
+  background: var(--bg-canvas);
+  font-family: var(--font-inter);
   overflow-x: hidden;
+  transition: background-color 0.25s ease, color 0.25s ease;
 }
 
+/* Custom Scrollbars */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 ::-webkit-scrollbar-thumb {
-  background: #cfe0ee;
+  background: #334155;
   border-radius: 6px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #475569;
 }
 ::-webkit-scrollbar-track {
   background: transparent;
 }
 
+/* Map District SVG polygon transitions */
 .district-shape {
   cursor: pointer;
-  stroke: #ffffff;
-  stroke-width: 1.5;
-  transition: all 0.2s ease;
+  stroke: rgba(255, 255, 255, 0.2);
+  stroke-width: 0.8;
+  transition: fill 0.3s cubic-bezier(0.4, 0, 0.2, 1), stroke 0.2s ease, filter 0.2s ease, transform 0.2s ease;
 }
+
 .district-shape:hover {
-  filter: brightness(1.1);
-  transform: translateY(-1px);
+  filter: brightness(1.22);
+  stroke: #f59e0b;
+  stroke-width: 2;
 }
+
 .district-shape.selected {
-  stroke: #062a4d;
-  stroke-width: 3.5;
+  stroke: #f59e0b;
+  stroke-width: 2.8;
+  filter: drop-shadow(0 0 8px rgba(245, 158, 11, 0.6));
 }
 
-.card {
-  background: #ffffff;
-  border-radius: 14px;
-  box-shadow: 0 2px 14px rgba(6, 42, 77, 0.07);
-  transition: box-shadow 0.2s ease, transform 0.2s ease;
-}
-.card:hover.hoverable {
-  box-shadow: 0 8px 28px rgba(6, 42, 77, 0.12);
-}
-
-.toggle-switch {
-  width: 40px;
-  height: 22px;
-  border-radius: 999px;
-  background: #d7e2ee;
-  position: relative;
-  cursor: pointer;
+/* Range Slider Styling */
+input[type="range"].time-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 8px;
+  border-radius: 4px;
+  background: #334155;
+  outline: none;
   transition: background 0.2s;
-  flex-shrink: 0;
-}
-.toggle-switch.on {
-  background: #27ae60;
-}
-.toggle-switch .dot {
-  position: absolute;
-  top: 2px;
-  left: 2px;
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  background: #ffffff;
-  transition: left 0.2s;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-}
-.toggle-switch.on .dot {
-  left: 20px;
 }
 
+input[type="range"].time-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #f59e0b;
+  cursor: pointer;
+  border: 3px solid #0f172a;
+  box-shadow: 0 0 12px rgba(245, 158, 11, 0.6);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+input[type="range"].time-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.18);
+  box-shadow: 0 0 16px rgba(245, 158, 11, 0.9);
+}
+
+input[type="range"].time-slider::-moz-range-thumb {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #f59e0b;
+  cursor: pointer;
+  border: 3px solid #0f172a;
+  box-shadow: 0 0 12px rgba(245, 158, 11, 0.6);
+}
+
+/* Smooth motion animations */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -91,5 +162,18 @@ body {
 }
 
 .animate-fade-in {
-  animation: fadeIn 0.3s ease forwards;
+  animation: fadeIn 0.25s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 12px rgba(245, 158, 11, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 24px rgba(245, 158, 11, 0.8);
+  }
+}
+
+.pulse-glow {
+  animation: pulseGlow 2.5s infinite ease-in-out;
 }

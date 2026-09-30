@@ -12,6 +12,7 @@ from app.api.v1.websocket_routes import router as ws_router
 from app.api.v1.citizen_field import router as citizen_field_router
 from app.api.v1.ai_assistant import router as ai_router
 from app.api.v1.reports_public import router as reports_public_router
+from app.api.v1.jalrakshak import router as jalrakshak_router
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("jalsuraksha")
@@ -54,6 +55,7 @@ app.include_router(ws_router, prefix=settings.API_V1_STR)
 app.include_router(citizen_field_router, prefix=settings.API_V1_STR)
 app.include_router(ai_router, prefix=settings.API_V1_STR)
 app.include_router(reports_public_router, prefix=settings.API_V1_STR)
+app.include_router(jalrakshak_router, prefix=settings.API_V1_STR)
 
 
 @app.get("/")
