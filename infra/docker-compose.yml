@@ -1,0 +1,127 @@
+version: '3.8'
+
+services:
+  timescaledb:
+    image: timescale/timescaledb-ha:pg16
+    container_name: jalsuraksha_timescaledb
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-jalsuraksha}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-jalsuraksha_secure_dev_pass}
+      POSTGRES_DB: ${POSTGRES_DB:-jalsuraksha_db}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - timescale_data:/home/postgres/pgdata/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-jalsuraksha} -d ${POSTGRES_DB:-jalsuraksha_db}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: jalsuraksha_redis
+    restart: always
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  minio:
+    image: minio/minio:latest
+    container_name: jalsuraksha_minio
+    restart: always
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: ${S3_ACCESS_KEY:-minioadmin}
+      MINIO_ROOT_PASSWORD: ${S3_SECRET_KEY:-minioadmin}
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - minio_data:/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  api:
+    build:
+      context: ..
+      dockerfile: infra/docker/Dockerfile.api
+    container_name: jalsuraksha_api
+    restart: always
+    environment:
+      - DATABASE_URL=postgresql://${POSTGRES_USER:-jalsuraksha}:${POSTGRES_PASSWORD:-jalsuraksha_secure_dev_pass}@timescaledb:5432/${POSTGRES_DB:-jalsuraksha_db}
+      - REDIS_URL=redis://redis:6379/0
+      - S3_ENDPOINT=http://minio:9000
+      - SECRET_KEY=${SECRET_KEY}
+      - ENVIRONMENT=${ENVIRONMENT}
+    ports:
+      - "8000:8000"
+    depends_on:
+      timescaledb:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  web:
+    build:
+      context: ..
+      dockerfile: infra/docker/Dockerfile.web
+    container_name: jalsuraksha_web
+    restart: always
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:8000/api/v1
+      - NEXT_PUBLIC_WS_URL=ws://localhost:8000/api/v1/ws/stream
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api
+
+  ingestion:
+    build:
+      context: ..
+      dockerfile: infra/docker/Dockerfile.ingestion
+    container_name: jalsuraksha_ingestion
+    restart: always
+    environment:
+      - DATABASE_URL=postgresql://${POSTGRES_USER:-jalsuraksha}:${POSTGRES_PASSWORD:-jalsuraksha_secure_dev_pass}@timescaledb:5432/${POSTGRES_DB:-jalsuraksha_db}
+      - REDIS_URL=redis://redis:6379/0
+    depends_on:
+      timescaledb:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  ml-worker:
+    build:
+      context: ..
+      dockerfile: infra/docker/Dockerfile.ml
+    container_name: jalsuraksha_ml
+    restart: always
+    environment:
+      - DATABASE_URL=postgresql://${POSTGRES_USER:-jalsuraksha}:${POSTGRES_PASSWORD:-jalsuraksha_secure_dev_pass}@timescaledb:5432/${POSTGRES_DB:-jalsuraksha_db}
+      - REDIS_URL=redis://redis:6379/0
+    depends_on:
+      timescaledb:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+volumes:
+  timescale_data:
+  redis_data:
+  minio_data:
