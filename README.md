@@ -1,11 +1,11 @@
-# 💧 JalSuraksha — AI Water Resource Intelligence
+#  JalSuraksha — AI Water Resource Intelligence
 
 > *"Predict • Protect • Preserve"*  
 > National & State Real-Time Water Resource Management, ML-Driven Forecasting & Citizen Decision Support Platform for India.
 
 ---
 
-## 🌟 Overview
+##  Overview
 
 **JalSuraksha** replaces static simulations with an authoritative, production-grade geospatial intelligence platform that aggregates live and scheduled groundwater, reservoir, rainfall, and water quality telemetry across India (India-WRIS, CGWB, CWC, IMD, CPCB, Open-Meteo).
 
@@ -19,7 +19,7 @@
 
 ---
 
-## 🏗️ Monorepo Architecture
+##  Monorepo Architecture
 
 ```
 JalSuraksha/
@@ -38,7 +38,7 @@ JalSuraksha/
 
 ---
 
-## 🚀 Quickstart
+##  Quickstart
 
 ### Prerequisites
 - Python 3.10+ (Python 3.12 recommended)
