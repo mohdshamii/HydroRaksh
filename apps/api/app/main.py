@@ -6,6 +6,12 @@ from app.core.config import settings
 from app.db.init_db import init_db
 from app.api.v1.auth import router as auth_router
 from app.api.v1.admin import router as admin_router
+from app.api.v1.dashboard import router as dashboard_router
+from app.api.v1.modules import router as modules_router
+from app.api.v1.websocket_routes import router as ws_router
+from app.api.v1.citizen_field import router as citizen_field_router
+from app.api.v1.ai_assistant import router as ai_router
+from app.api.v1.reports_public import router as reports_public_router
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("jalsuraksha")
@@ -42,6 +48,12 @@ app.add_middleware(
 # Mount Routers
 app.include_router(auth_router, prefix=settings.API_V1_STR)
 app.include_router(admin_router, prefix=settings.API_V1_STR)
+app.include_router(dashboard_router, prefix=settings.API_V1_STR)
+app.include_router(modules_router, prefix=settings.API_V1_STR)
+app.include_router(ws_router, prefix=settings.API_V1_STR)
+app.include_router(citizen_field_router, prefix=settings.API_V1_STR)
+app.include_router(ai_router, prefix=settings.API_V1_STR)
+app.include_router(reports_public_router, prefix=settings.API_V1_STR)
 
 
 @app.get("/")
