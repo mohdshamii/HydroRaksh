@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jalsuraksha-web
+  namespace: jalsuraksha
+  labels:
+    app: jalsuraksha-web
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: jalsuraksha-web
+  template:
+    metadata:
+      labels:
+        app: jalsuraksha-web
+    spec:
+      containers:
+        - name: web
+          image: ghcr.io/mohdshamii/jalsuraksha-web:v1.0.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 3000
+          env:
+            - name: NODE_ENV
+              value: "production"
+            - name: NEXT_PUBLIC_API_URL
+              value: "https://jalsuraksha.gov.in/api/v1"
+            - name: NEXT_PUBLIC_WS_URL
+              value: "wss://jalsuraksha.gov.in/api/v1/ws/stream"
+          resources:
+            requests:
+              cpu: "200m"
+              memory: "256Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: jalsuraksha-web-service
+  namespace: jalsuraksha
+spec:
+  type: ClusterIP
+  selector:
+    app: jalsuraksha-web
+  ports:
+    - port: 3000
+      targetPort: 3000
