@@ -14,21 +14,39 @@ export function TimeSliderDock({ currentYear, onYearChange }: TimeSliderDockProp
   const [playbackSpeed, setPlaybackSpeed] = useState<number>(1);
   const playIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
-  useEffect(() => {
-    if (isPlaying) {
-      const intervalMs = Math.max(80, Math.floor(400 / playbackSpeed));
-      playIntervalRef.current = setInterval(() => {
-        onYearChange((prev) => {
-          if (prev >= 2035) {
-            setIsPlaying(false);
-            return 2035;
-          }
-          return prev + 1;
-        });
-      }, intervalMs);
-    } else if (playIntervalRef.current) {
-      clearInterval(playIntervalRef.current);
+  const handleTogglePlay = () => {
+    if (!isPlaying) {
+      if (currentYear >= 2035) {
+        onYearChange(2000);
+      }
+      setIsPlaying(true);
+    } else {
+      setIsPlaying(false);
     }
+  };
+
+  // Pure state updater without side effects: safely stop playback when terminal horizon is reached
+  useEffect(() => {
+    if (isPlaying && currentYear >= 2035) {
+      setIsPlaying(false);
+    }
+  }, [isPlaying, currentYear]);
+
+  useEffect(() => {
+    if (!isPlaying) {
+      if (playIntervalRef.current) clearInterval(playIntervalRef.current);
+      return;
+    }
+
+    const intervalMs = Math.max(80, Math.floor(400 / playbackSpeed));
+    playIntervalRef.current = setInterval(() => {
+      onYearChange((prev) => {
+        if (prev >= 2035) {
+          return 2035;
+        }
+        return prev + 1;
+      });
+    }, intervalMs);
 
     return () => {
       if (playIntervalRef.current) clearInterval(playIntervalRef.current);
@@ -42,7 +60,7 @@ export function TimeSliderDock({ currentYear, onYearChange }: TimeSliderDockProp
 
       if (e.code === "Space") {
         e.preventDefault();
-        setIsPlaying((p) => !p);
+        handleTogglePlay();
       } else if (e.code === "ArrowLeft") {
         e.preventDefault();
         onYearChange((prev) => Math.max(2000, prev - (e.shiftKey ? 5 : 1)));
@@ -54,7 +72,7 @@ export function TimeSliderDock({ currentYear, onYearChange }: TimeSliderDockProp
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [onYearChange]);
+  }, [handleTogglePlay, onYearChange]);
 
   const activeHorizon =
     PLANNING_HORIZONS.slice().reverse().find((h) => currentYear >= h.year) ||
@@ -100,7 +118,7 @@ export function TimeSliderDock({ currentYear, onYearChange }: TimeSliderDockProp
             </button>
 
             <button
-              onClick={() => setIsPlaying((p) => !p)}
+              onClick={handleTogglePlay}
               title={isPlaying ? "Pause (Space)" : "Play Timeline (Space)"}
               className="px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl bg-saffron hover:bg-saffron-hover text-slate-900 font-bold flex items-center gap-1.5 shadow-glow transition"
             >
