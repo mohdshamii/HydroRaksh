@@ -1,15 +1,5 @@
 # JalSuraksha: Collaborative Filtering and Latent Topic Analysis for AI-Driven Groundwater Intelligence and Water Resource Decision Support
 
-**Mohd Shami**  
-Department of Computer Science and Engineering (Data Science and Artificial Intelligence)  
-JalSuraksha Research Initiative, Greater Noida, Uttar Pradesh, India  
-Email: mohdshami@jalsuraksha.gov.in  
-
-**Aman Malik**  
-Department of Computer Science and Engineering (Data Science and Artificial Intelligence)  
-JalSuraksha Research Initiative, Greater Noida, Uttar Pradesh, India  
-Email: aman.malik@jalsuraksha.gov.in  
-
 ---
 
 ## Abstract
@@ -649,7 +639,3 @@ If you use JalSuraksha in your academic research, environmental planning project
 6. Bureau of Indian Standards (BIS), *Indian Standard Drinking Water - Specification (Second Revision of IS 10500)*, Manak Bhavan, New Delhi, 2012.
 
 ---
-
-**JalSuraksha Research Initiative**  
-Department of Computer Science & Engineering (Data Science + Artificial Intelligence)  
-Greater Noida, Uttar Pradesh, India.
