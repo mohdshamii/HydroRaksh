@@ -1,6 +1,5 @@
-# JalSuraksha: Collaborative Filtering and Latent Topic Analysis for AI-Driven Groundwater Intelligence and Water Resource Decision Support
+# HydroRaksh aka JalSuraksha: Collaborative Filtering and Latent Topic Analysis for AI-Driven Groundwater Intelligence and Water Resource Decision Support
 
----
 
 ## Abstract
 
