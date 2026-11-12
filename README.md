@@ -2,11 +2,11 @@
 
 **AI-driven groundwater intelligence and water resource decision support for India.**
 
-[![Tests](https://img.shields.io/badge/tests-101%20passing-248653.svg)](tests/unit)
+[![Tests](https://img.shields.io/badge/tests-111%20passing-248653.svg)](tests/unit)
 [![Flask](https://img.shields.io/badge/Flask-3.0.0-12345A.svg)](apps/flask_app)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.109.2-245B8F.svg)](apps/api)
-[![Notebooks](https://img.shields.io/badge/Jupyter-16%20notebooks-E88B2A.svg)](ml/notebooks)
-[![Docker](https://img.shields.io/badge/Docker-ready-80B8F0.svg)](docker-compose.yml)
+[![Empirical Records](https://img.shields.io/badge/CGWB%20%2F%20IMD-1.4M%2B%20records-E88B2A.svg)](data/)
+[![Districts](https://img.shields.io/badge/Coverage-780%20Districts%20%E2%80%A2%2036%20States-127D3B.svg)](data/District%20Boundaries/)
 
 JalSuraksha is an independent research project and is **not** an official Government of India or state department website. All hydrological and meteorological data is compiled from publicly available records published by CGWB, IMD, India-WRIS, and CWC.
 
@@ -49,17 +49,25 @@ JalSuraksha turns public groundwater observations into near-real-time, actionabl
 
 ## Screenshots
 
-All figures are captured from the running application and stored in [`img/`](img).
+All figures are captured directly from the running platform and stored in [`img/`](img).
 
-### 1. Core Map Canvas and Intelligence Dashboard
+### 1. Core National Map Canvas and Groundwater Intelligence Dashboard
 
-Interactive Pan-India groundwater intelligence canvas featuring district choropleth boundaries, river basin vectors, aquifer risk classifications (Over-Exploited, Critical, Semi-Critical, Safe), 2000–2035 planning horizon timeline controls, active IoT piezometers, and real-time district dossier telemetry.
+Interactive Pan-India groundwater intelligence canvas featuring authentic Survey of India district choropleth boundaries, river basin vectors, aquifer risk classifications (Over-Exploited, Critical, Semi-Critical, Safe), 2000–2035 planning horizon timeline controls, active IoT piezometers, and real-time national telemetry ticker.
 
-![Core Map Canvas and Intelligence Dashboard](img/dashboard_light.png)
+![Core Map Canvas and Intelligence Dashboard](img/Dashboard.png)
 
 ---
 
-### 2. Super Intelligence Lab (AI / ML Studio)
+### 2. District Hydrogeological Dossier & Analytical Decision Interface
+
+Detailed district telemetry context panel displaying empirical CGWB water table observation depth trends (mbgl), active monitoring stations, BIS 10500:2012 water quality chemical compliance (Fluoride, Arsenic, Nitrate, TDS, Uranium), IMD seasonal rainfall departure percentages, and JalRakshak prescriptive decision-support tools.
+
+![District Hydrogeological Dossier and Decision Interface](img/Dashboard2.png)
+
+---
+
+### 3. Super Intelligence Lab (AI / ML Studio)
 
 Automated exploratory data analysis (EDA) and hydrological machine learning studio profiling 780 districts across 36 States and Union Territories. Features bivariate hydrological correlation matrices (Pearson r), one-way ANOVA hypothesis testing across physical geological formations, telemetry sentinel data quality certification, and parametric summary distribution statistics.
 

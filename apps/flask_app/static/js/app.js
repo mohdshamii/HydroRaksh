@@ -477,6 +477,13 @@ window.JalSuraksha = (function() {
     }
   }
 
+  function toggleMobileMenu() {
+    const el = document.getElementById("navbarMobileMenu");
+    if (!el) return;
+    el.classList.toggle("hidden");
+    if (window.lucide) window.lucide.createIcons();
+  }
+
   return {
     state,
     init,
@@ -490,6 +497,7 @@ window.JalSuraksha = (function() {
     openModal,
     closeModal,
     toggleModal,
+    toggleMobileMenu,
     updateContextPanel
   };
 })();

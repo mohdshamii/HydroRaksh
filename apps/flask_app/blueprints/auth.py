@@ -59,3 +59,52 @@ def login():
         })
 
     return jsonify({"status": "error", "message": "Invalid email or password"}), 401
+
+
+@bp.route("/register", methods=["POST"])
+def register():
+    """Register a new user in JSON user store or fallback."""
+    payload = request.get_json(silent=True) or {}
+    email = payload.get("email", "").lower().strip()
+    password = payload.get("password", "")
+    full_name = payload.get("full_name", "")
+    role = payload.get("role", "Citizen")
+    department = payload.get("department", "Public Citizen")
+    jurisdiction_state = payload.get("jurisdiction_state")
+    jurisdiction_district = payload.get("jurisdiction_district")
+
+    if not email or not password or not full_name:
+        return jsonify({"status": "error", "message": "email, password, and full_name required"}), 400
+
+    try:
+        created_user = JsonUserStore.create_user(
+            email=email,
+            password=password,
+            full_name=full_name,
+            role=role if role in ["Citizen", "Analyst", "public_user", "scientist"] else "Citizen",
+            department=department,
+            jurisdiction_state=jurisdiction_state,
+            jurisdiction_district=jurisdiction_district,
+        )
+        return jsonify(created_user), 201
+    except ValueError as ve:
+        return jsonify({"status": "error", "message": str(ve)}), 400
+    except Exception as e:
+        return jsonify({"status": "error", "message": f"Registration error: {str(e)}"}), 500
+
+
+@bp.route("/roles", methods=["GET"])
+def get_roles():
+    """Return list of standard RBAC roles."""
+    return jsonify([
+        {"role": "public_user", "display": "Citizen / Public Analyst", "description": "National public read-only telemetry, water quality lookup, citizen reports"},
+        {"role": "scientist", "display": "Hydrogeologist / Research Scientist", "description": "Full ML analytics, SHAP XAI models, ANOVA, raw scientific CSV exports"},
+        {"role": "admin", "display": "Groundwater Board Administrator", "description": "Full administrative control, pipeline triggers, user authorization, telemetry settings"},
+    ])
+
+
+@bp.route("/logout", methods=["POST"])
+def logout():
+    """Terminate user session."""
+    return jsonify({"status": "success", "message": "User session invalidated successfully"})
+

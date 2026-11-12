@@ -1,45 +1,82 @@
-# JalSuraksha — Required External Inputs & Credentials
+# JalSuraksha — Environment Variables & External Integration Configuration
 
-The platform is designed to run completely autonomously with local defaults, mock fallbacks, and free public APIs (e.g. Open-Meteo, public Open Data portals). However, for full production deployment to government cloud environments and official live channels, the following external credentials and resources can be provided via environment variables (`.env`):
-
----
-
-## 1. Optional Government & Data Portal API Keys
-
-| Parameter Name | Target Integration | Description | Default Fallback if Absent |
-| :--- | :--- | :--- | :--- |
-| `DATA_GOV_IN_API_KEY` | data.gov.in (OGD Platform India) | API key for automated querying of national open water datasets | Fallback to cached Open Data fixtures and direct web queries |
-| `IMD_API_KEY` / `AWS_IMD_KEY` | India Meteorological Department | Official district gridded rainfall & weather alert endpoints | Open-Meteo API (free, global high-res weather & historical rainfall) |
-| `INDIA_WRIS_TOKEN` | India-WRIS (National Water Informatics) | Live API token for real-time well piezometer & telemetry telemetry | Automated respectful scraper with rate limiting and local SQLite/Postgres cache |
-| `CPCB_AQI_WQI_KEY` | Central Pollution Control Board | Live river & groundwater quality monitoring station feeds | National Water Quality bulletin fixtures and state PCB feeds |
+**Platform:** JalSuraksha — National AI Groundwater Intelligence & Decision-Support System  
+**Design Philosophy:** **Zero-Blocker Autonomous Architecture**  
 
 ---
 
-## 2. Notification & Communication Gateway Credentials
+## 1. Zero-Blocker Architecture Overview
 
-| Parameter Name | Service | Purpose | Fallback if Absent |
-| :--- | :--- | :--- | :--- |
-| `SMS_GATEWAY_URL` / `SMS_API_KEY` | C-DAC Mobile Seva / Twilio | SMS notifications for critical drought/flood warnings to rural citizens | In-app notification bell & mock SMS log console |
-| `WHATSAPP_TOKEN` / `WHATSAPP_PHONE_ID` | WhatsApp Cloud API | WhatsApp advisories and citizen chatbot | In-app notifications & citizen web portal |
-| `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASSWORD` | Mail Server (Gov NIC Mail or SendGrid) | Scheduled PDF district water reports & alert emails | Local file export download directly in browser |
+JalSuraksha is designed to run **completely autonomously and offline out of the box** without requiring any third-party paid API keys, external cloud accounts, or remote network dependencies.
 
----
-
-## 3. Production Cloud & Infrastructure
-
-| Parameter Name | Target Deployment | Purpose |
-| :--- | :--- | :--- |
-| `CLOUD_PROVIDER` | AWS / Azure / MeghRaj (NIC Cloud) | Target cloud platform for Kubernetes & Terraform |
-| `DOMAIN_NAME` | e.g. `jalsuraksha.gov.in` | Base domain for SSL certificates (Let's Encrypt / Cert-Manager) |
-| `SENTRY_DSN` | Sentry Error Tracking | Centralized application exception & performance monitoring |
-| `OPENAI_API_KEY` or `GEMINI_API_KEY` | LLM Provider | AI Assistant RAG pipeline (FastAPI local RAG fallback included) |
+- **Empirical Government Data:** Over **1,400,000 empirical observations** (CGWB groundwater levels 1991–2025, CGWB water quality chemical assays, IMD rainfall records, NAQUIM aquifer attributes, and Survey of India district boundaries) are pre-indexed locally in `data/` and cached in `data/cache/`.
+- **Database Fallback:** If PostgreSQL or TimescaleDB is not configured or reachable, the platform automatically falls back to an embedded SQLite database (`jalsuraksha_local.db`) with identical schemas and seeded records.
+- **AI Copilot Fallback:** The conversational AI assistant includes a deterministic hydrogeological retrieval-augmented response engine that answers questions using local database tables, BIS 10500 standards, and CGWB bulletins when no external LLM API key is present.
 
 ---
 
-## 4. Immediate Development Status
+## 2. Environment Variables Specification (`.env`)
 
-> [!NOTE]
-> **Zero Blocker Architecture:** No external API key is strictly required to run and test the complete platform locally. Every connector implements a triple-tier resolution strategy:
-> 1. Official live API (if key present in `.env`)
-> 2. Respectful public fetch / Open-Meteo live API (no key required)
-> 3. Verified offline fixture with real data provenance and explicit `STALE` / `SIMULATED` badging.
+For enterprise cloud deployment, live national single sign-on, and scheduled automated updates, the following optional parameters can be configured:
+
+### A. Core Database & Caching
+| Variable Name | Required? | Default / Fallback | Description |
+| :--- | :---: | :--- | :--- |
+| `DATABASE_URL` | Optional | `sqlite:///jalsuraksha_local.db` | PostgreSQL / TimescaleDB connection string (e.g., `postgresql://user:pass@localhost:5432/jalsuraksha_db`). |
+| `REDIS_URL` | Optional | `redis://localhost:6379/0` (In-memory if missing) | Redis connection URL for real-time WebSocket telemetry pub/sub broadcast. |
+| `CACHE_DIR` | Optional | `data/cache` | Directory where pre-indexed empirical hydrology cache files reside. |
+
+---
+
+### B. Enterprise Authentication & Single Sign-On (SSO)
+| Variable Name | Required? | Default / Fallback | Description |
+| :--- | :---: | :--- | :--- |
+| `SECRET_KEY` | Optional | Auto-generated secure random string | Secret key for signing local session JWT tokens (HS256). |
+| `AUTH_STORAGE_MODE` | Optional | `json` (or `db`) | Switches between local JSON user store (`data/private/users.json`) and relational DB. |
+| `SUPABASE_URL` | Optional | None (Local fallback active) | Supabase project URL for hosted PostgreSQL and managed authentication. |
+| `SUPABASE_KEY` | Optional | None | Supabase public anonymous API key for client-side authentication. |
+| `SUPABASE_SERVICE_ROLE_KEY` | Optional | None | Supabase privileged service key for administrative user management. |
+| `GOOGLE_CLIENT_ID` | Optional | None (Fallback notification) | Google Cloud OAuth 2.0 Client ID for institutional government single sign-on. |
+| `GOOGLE_CLIENT_SECRET` | Optional | None | Google Cloud OAuth 2.0 Client Secret. |
+
+---
+
+### C. Live National Data Portals & APIs
+| Variable Name | Required? | Default / Fallback | Description |
+| :--- | :---: | :--- | :--- |
+| `DATA_GOV_IN_API_KEY` | Optional | Local CGWB CSV files | API key for querying Open Government Data (OGD) Platform India (`data.gov.in`). |
+| `IMD_API_KEY` | Optional | Open-Meteo & Local IMD CSVs | India Meteorological Department official weather API key. |
+| `INDIA_WRIS_TOKEN` | Optional | Local CGWB historical levels | National Water Informatics Centre API token for live DWLR piezometer telemetry. |
+| `CPCB_API_KEY` | Optional | Local Water Quality CSVs | Central Pollution Control Board water quality station feed. |
+
+---
+
+### D. Conversational AI Assistant (LLM)
+| Variable Name | Required? | Default / Fallback | Description |
+| :--- | :---: | :--- | :--- |
+| `GEMINI_API_KEY` | Optional | Local Hydrogeological RAG | Google Gemini API key for enhanced natural language synthesis and report summarization. |
+| `OPENAI_API_KEY` | Optional | Local Hydrogeological RAG | OpenAI API key for alternative LLM provider. |
+
+---
+
+## 3. Sample Development `.env` Template
+
+```ini
+# --- Application Environment ---
+ENVIRONMENT=development
+FLASK_APP=apps.flask_app:create_app
+FLASK_DEBUG=1
+PORT=5000
+
+# --- Database & Storage ---
+# Leave commented to automatically use zero-setup local SQLite
+# DATABASE_URL=postgresql://jalsuraksha:jalsuraksha@localhost:5432/jalsuraksha_db
+AUTH_STORAGE_MODE=json
+
+# --- Security ---
+SECRET_KEY=jalsuraksha-national-secret-key-change-in-production-2026
+
+# --- Optional Third-Party Credentials ---
+# GEMINI_API_KEY=your_gemini_api_key_here
+# GOOGLE_CLIENT_ID=your_google_client_id_here
+```

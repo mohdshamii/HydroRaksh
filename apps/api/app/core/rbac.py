@@ -75,11 +75,31 @@ def get_optional_current_user(
         return None
 
 
+ROLE_ALIASES = {
+    "public_user": {"public_user", "Citizen"},
+    "citizen": {"public_user", "Citizen"},
+    "scientist": {"scientist", "Analyst"},
+    "analyst": {"scientist", "Analyst"},
+    "admin": {"admin", "Super Admin"},
+    "super admin": {"admin", "Super Admin"},
+    "nodal officer": {"nodal officer", "Nodal Officer"}
+}
+
+
 def require_roles(allowed_roles: List[str]):
+    # Expand roles to include both government role names and legacy database role names
+    expanded = set()
+    for r in allowed_roles:
+        r_clean = r.strip().lower()
+        if r_clean in ROLE_ALIASES:
+            expanded.update(ROLE_ALIASES[r_clean])
+        else:
+            expanded.add(r)
+
     def role_checker(current_user: User = Depends(get_current_user)) -> User:
-        if "Super Admin" in [current_user.role]:
+        if current_user.role in ["Super Admin", "admin"]:
             return current_user
-        if current_user.role not in allowed_roles:
+        if current_user.role not in expanded:
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
                 detail=f"Access denied. Requires one of roles: {', '.join(allowed_roles)}",
