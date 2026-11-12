@@ -11,6 +11,7 @@ Validates:
 
 import sys
 import os
+from pathlib import Path
 import pytest
 
 sys.path.insert(0, os.path.abspath("."))
@@ -21,6 +22,22 @@ from services.data_service import data_service
 from apps.flask_app import create_app
 
 
+def _has_real_data_assets(data_root: Path | None = None) -> bool:
+    root = data_root or (Path(__file__).resolve().parents[2] / "data")
+    return (
+        any((root / "CGWG").glob("*.csv"))
+        and any((root / "Ground Water Quality").glob("*.csv"))
+        and (root / "Rainfall District wise Daily" / "rainfall_districtwise_daily_imd.csv").exists()
+        and (root / "Aquifire Spread Data" / "Major_Principal_Aquifer.dbf").exists()
+    )
+
+
+REQUIRES_REAL_DATA = pytest.mark.skipif(
+    not _has_real_data_assets(),
+    reason="Requires local raw hydrology datasets that are not checked into the repository.",
+)
+
+
 @pytest.fixture
 def client():
     app = create_app()
@@ -29,6 +46,24 @@ def client():
         yield client
 
 
+def test_real_data_asset_guard_false_for_missing_tree(tmp_path):
+    assert _has_real_data_assets(tmp_path) is False
+
+
+def test_real_data_asset_guard_true_with_minimal_tree(tmp_path):
+    (tmp_path / "CGWG").mkdir()
+    (tmp_path / "CGWG" / "sample.csv").write_text("x", encoding="utf-8")
+    (tmp_path / "Ground Water Quality").mkdir()
+    (tmp_path / "Ground Water Quality" / "sample.csv").write_text("x", encoding="utf-8")
+    (tmp_path / "Rainfall District wise Daily").mkdir()
+    (tmp_path / "Rainfall District wise Daily" / "rainfall_districtwise_daily_imd.csv").write_text("x", encoding="utf-8")
+    (tmp_path / "Aquifire Spread Data").mkdir()
+    (tmp_path / "Aquifire Spread Data" / "Major_Principal_Aquifer.dbf").write_text("x", encoding="utf-8")
+
+    assert _has_real_data_assets(tmp_path) is True
+
+
+@REQUIRES_REAL_DATA
 def test_real_data_service_groundwater_indexing():
     """Verify CGWB groundwater levels are parsed and indexed across 500+ districts."""
     gw_dict = real_data_service.groundwater_by_district
@@ -44,6 +79,7 @@ def test_real_data_service_groundwater_indexing():
     assert "CGWB" in agra_gw["provenance"]
 
 
+@REQUIRES_REAL_DATA
 def test_real_data_service_water_quality_and_bis10500():
     """Verify CGWB chemical assays are parsed and evaluated against BIS 10500 standards."""
     wq_dict = real_data_service.water_quality_by_district
@@ -58,6 +94,7 @@ def test_real_data_service_water_quality_and_bis10500():
     assert "exceedances" in agra_wq
 
 
+@REQUIRES_REAL_DATA
 def test_real_data_service_rainfall():
     """Verify IMD daily district-wise rainfall data integration."""
     rf_dict = real_data_service.rainfall_by_district
@@ -70,6 +107,7 @@ def test_real_data_service_rainfall():
     assert "IMD" in agra_rf["provenance"]
 
 
+@REQUIRES_REAL_DATA
 def test_real_data_service_aquifer_systems():
     """Verify 42+ principal aquifer formations loaded from Major_Principal_Aquifer.dbf."""
     aquifers = real_data_service.get_aquifers()
@@ -81,6 +119,7 @@ def test_real_data_service_aquifer_systems():
     assert any("Gneiss" in n for n in names)
 
 
+@REQUIRES_REAL_DATA
 def test_real_data_service_provenance_registry():
     """Verify provenance metadata registry records source organizations, coverage, and license."""
     prov = real_data_service.get_provenance()
@@ -95,6 +134,7 @@ def test_real_data_service_provenance_registry():
     assert "GODL-India" in gw_prov["license"]
 
 
+@REQUIRES_REAL_DATA
 def test_data_service_enrichment_and_authentic_soi_geometry():
     """Verify districts in data_service are enriched with real empirical metrics and SOI vector paths."""
     up_districts = data_service.get_districts_for_state("UP")
@@ -113,6 +153,7 @@ def test_data_service_enrichment_and_authentic_soi_geometry():
     assert agra["svgPath"].startswith("M")
 
 
+@REQUIRES_REAL_DATA
 def test_api_water_levels_endpoint(client):
     """Verify /api/v1/water-levels returns empirical depth, stations, and provenance."""
     resp = client.get("/api/v1/water-levels?district_id=agra")
@@ -126,6 +167,7 @@ def test_api_water_levels_endpoint(client):
     assert "CGWB" in data["provenance"]
 
 
+@REQUIRES_REAL_DATA
 def test_api_water_quality_endpoint(client):
     """Verify /api/v1/water-quality returns real chemical assay and BIS 10500 standards."""
     resp = client.get("/api/v1/water-quality?district_id=agra")
@@ -140,6 +182,7 @@ def test_api_water_quality_endpoint(client):
     assert "fluoride_mg_l" in data["standards"]
 
 
+@REQUIRES_REAL_DATA
 def test_api_rainfall_endpoint(client):
     """Verify /api/v1/rainfall returns IMD rainfall and departure."""
     resp = client.get("/api/v1/rainfall?district_id=agra")
@@ -157,4 +200,3 @@ def test_rbac_role_aliases():
     assert "Citizen" in ROLE_ALIASES["public_user"]
     assert "Analyst" in ROLE_ALIASES["scientist"]
     assert "Super Admin" in ROLE_ALIASES["admin"]
-
