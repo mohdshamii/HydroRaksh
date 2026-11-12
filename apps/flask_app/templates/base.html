@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>{% block title %}JalSuraksha — AI Water Resource Intelligence Platform{% endblock %}</title>
-  <meta name="description" content="Pan-India geospatial artificial intelligence, hydrogeological forecasting, and decision support platform for 700+ districts across 36 States and Union Territories." />
+  <title>{% block title %}JalSuraksha — National Water Resource Intelligence Platform{% endblock %}</title>
+  <meta name="description" content="AI-driven national groundwater intelligence and scientific decision support platform for 700+ districts across 36 States and Union Territories of India." />
   
   <!-- Immediate Theme Initialization to Prevent FOUC -->
   <script>
@@ -13,16 +13,20 @@
         const params = new URLSearchParams(window.location.search);
         const urlTheme = params.get("theme");
         const savedTheme = localStorage.getItem("jalsuraksha_theme");
-        const theme = urlTheme || savedTheme;
+        const theme = urlTheme || savedTheme || "dark";
         if (theme === "light") {
           document.documentElement.setAttribute("data-theme", "light");
           document.documentElement.classList.remove("dark");
-          localStorage.setItem("jalsuraksha_theme", "light");
-        } else if (theme === "dark") {
+          document.documentElement.classList.add("light");
+        } else {
           document.documentElement.setAttribute("data-theme", "dark");
           document.documentElement.classList.add("dark");
-          localStorage.setItem("jalsuraksha_theme", "dark");
+          document.documentElement.classList.remove("light");
         }
+
+        // Font size accessibility scale
+        const savedScale = localStorage.getItem("jalsuraksha_font_scale") || "100";
+        document.documentElement.style.fontSize = (parseInt(savedScale) / 100 * 16) + "px";
       } catch (e) {}
     })();
   </script>
@@ -30,7 +34,7 @@
   <!-- Preconnect to Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;0,800;0,900;1,700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Merriweather:ital,wght@0,400;0,700;0,900;1,400;1,700&display=swap" rel="stylesheet" />
 
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -40,18 +44,21 @@
       theme: {
         extend: {
           fontFamily: {
-            sans: ['Inter', 'sans-serif'],
-            serif: ['"Playfair Display"', 'Georgia', 'serif'],
+            sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+            serif: ['Merriweather', 'Georgia', 'serif'],
           },
           colors: {
-            primary: '#18B6C9',
-            accent: '#E9B44C',
-            danger: '#FF6B5E',
-            safe: '#2FBF8F',
-            navy: '#06182B',
-            navySecondary: '#0c2e4f',
-            saffron: '#E9B44C',
-            emeraldGreen: '#2FBF8F',
+            govNavy: '#0F2E5A',
+            govNavyDark: '#0A1E3F',
+            govNavyLight: '#1E3A8A',
+            tricolorSaffron: '#E06D10',
+            tricolorGreen: '#127D3B',
+            ashokaNavy: '#0F2E5A',
+            primary: '#0F2E5A',
+            accent: '#E06D10',
+            danger: '#DC2626',
+            warning: '#D97706',
+            safe: '#16A34A',
             atlas: {
               canvas: 'var(--bg-canvas)',
               card: 'var(--bg-card)',
@@ -64,13 +71,13 @@
             }
           },
           borderRadius: {
-            token: '18px',
+            gov: '6px',
+            token: '8px',
           },
           boxShadow: {
-            glow: '0 0 18px rgba(24, 182, 201, 0.45)',
-            glowSaffron: '0 0 18px rgba(233, 180, 76, 0.45)',
-            token: '0 10px 30px rgba(11, 60, 93, 0.15)',
-            cardDark: '0 10px 30px rgba(0, 0, 0, 0.45)',
+            card: 'var(--shadow-card)',
+            elevated: 'var(--shadow-elevated)',
+            modal: 'var(--shadow-modal)',
           }
         }
       }
@@ -94,6 +101,30 @@
   <script src="{{ url_for('static', filename='js/map.js') }}"></script>
   <script src="{{ url_for('static', filename='js/jalrakshak.js') }}"></script>
   <script src="{{ url_for('static', filename='js/ai_chat.js') }}"></script>
+
+  <!-- Global Accessibility Helpers -->
+  <script>
+    function changeFontSize(action) {
+      try {
+        let currentScale = parseInt(localStorage.getItem("jalsuraksha_font_scale") || "100");
+        if (action === 'increase' && currentScale < 120) currentScale += 10;
+        else if (action === 'decrease' && currentScale > 80) currentScale -= 10;
+        else if (action === 'reset') currentScale = 100;
+        localStorage.setItem("jalsuraksha_font_scale", currentScale.toString());
+        document.documentElement.style.fontSize = (currentScale / 100 * 16) + "px";
+      } catch (e) {}
+    }
+
+    function toggleLanguage(lang) {
+      try {
+        localStorage.setItem("jalsuraksha_lang", lang);
+        const currentUrl = new URL(window.location.href);
+        currentUrl.searchParams.set("lang", lang);
+        window.location.href = currentUrl.toString();
+      } catch (e) {}
+    }
+  </script>
+
   {% block extra_scripts %}{% endblock %}
 </body>
 </html>

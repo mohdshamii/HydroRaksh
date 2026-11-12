@@ -136,6 +136,25 @@
       </div>
     </div>
 
+    <!-- Empirical CGWB Observation Provenance Badge -->
+    {% if mwm.empiricalObservationsCount %}
+    <div class="p-2.5 rounded-xl bg-blue-50/70 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-900/60 text-xs space-y-1">
+      <div class="flex items-center justify-between text-[11px] font-bold text-govNavy dark:text-sky-300">
+        <span class="flex items-center gap-1.5">
+          <i data-lucide="check-circle" class="w-3.5 h-3.5 text-emerald-500"></i>
+          <span>CGWB Empirical Telemetry</span>
+        </span>
+        <span class="text-[10px] font-mono px-1.5 py-0.2 rounded bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-bold border border-emerald-500/20">
+          {{ mwm.empiricalObservationsCount }} Obs
+        </span>
+      </div>
+      <div class="text-[10px] text-atlas-muted flex items-center justify-between">
+        <span>Active Wells: <strong class="text-atlas-text">{{ mwm.monitoringStationsCount }} stations</strong></span>
+        <span>Observation Period: <strong class="text-atlas-text">{{ mwm.observationPeriod }}</strong></span>
+      </div>
+    </div>
+    {% endif %}
+
     <!-- Hydrogeological Context Summary -->
     <div class="p-3 rounded-xl bg-atlas-elevated/30 border border-atlas-border/60 text-xs space-y-1">
       <div class="font-bold text-[11px] text-atlas-text">River Basin &amp; Substrata</div>
@@ -253,6 +272,24 @@
         <span class="font-mono font-bold text-atlas-text"><span id="dossierNitrateVal">{{ wq.nitrateMgL | default(24.5) }} mg/L</span> <span class="text-atlas-muted font-normal text-[10px]">(≤ 45.0)</span></span>
       </div>
     </div>
+
+    <!-- Real BIS 10500 Chemical Exceedances (if any) -->
+    {% if wq.exceedances %}
+    <div class="p-3 rounded-xl bg-amber-500/10 border border-amber-500/30 text-xs space-y-1.5">
+      <div class="text-[11px] font-bold text-amber-600 dark:text-amber-400 flex items-center gap-1.5">
+        <i data-lucide="alert-triangle" class="w-3.5 h-3.5"></i>
+        <span>BIS 10500 Quality Exceedances</span>
+      </div>
+      <ul class="space-y-0.5 text-[10px] text-atlas-text list-disc list-inside">
+        {% for ex in wq.exceedances %}
+          <li>{{ ex }}</li>
+        {% endfor %}
+      </ul>
+      <div class="text-[10px] text-atlas-muted pt-0.5">
+        Testing: {{ wq.testingLab | default("CGWB Regional Chemical Laboratory") }} ({{ wq.samplesAnalyzed | default(1) }} assays)
+      </div>
+    </div>
+    {% endif %}
   </div>
 
   <!-- Tab 4: Borewell Failure Risk -->

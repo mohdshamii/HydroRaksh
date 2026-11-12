@@ -145,8 +145,9 @@ def get_water_levels():
     district = data_service.get_district(district_id) or data_service.get_district("agra")
     
     trajectory = district.get("temporalTrajectory") or []
-    depth = district.get("modernWaterMetrics", {}).get("groundwaterDepthM", 14.5)
-    trend = district.get("modernWaterMetrics", {}).get("groundwaterTrendAnnualCm", -24.0)
+    mwm = district.get("modernWaterMetrics", {})
+    depth = mwm.get("groundwaterDepthM", 14.5)
+    trend = mwm.get("groundwaterTrendAnnualCm", -24.0)
 
     return jsonify({
         "status": "success",
@@ -155,8 +156,12 @@ def get_water_levels():
         "state_code": district.get("stateCode", "UP"),
         "current_depth_m_bgl": depth,
         "ten_year_trend_annual_cm": trend,
-        "cgwb_stage_extraction_pct": district.get("modernWaterMetrics", {}).get("cgwbStageExtractionPct", 92.4),
-        "category": district.get("modernWaterMetrics", {}).get("cgwbCategory", "Critical"),
+        "cgwb_stage_extraction_pct": mwm.get("cgwbStageExtractionPct", 92.4),
+        "category": mwm.get("cgwbCategory", "Critical"),
+        "empirical_observations_count": mwm.get("empiricalObservationsCount"),
+        "monitoring_stations_count": mwm.get("monitoringStationsCount"),
+        "observation_period": mwm.get("observationPeriod", "1991-2024"),
+        "provenance": mwm.get("provenance", "CGWB National Groundwater Monitoring Well Network"),
         "trajectory": trajectory
     })
 
@@ -176,22 +181,24 @@ def get_water_quality():
         "fluorideMgL": 0.85,
         "arsenicMgL": 0.004,
         "nitrateMgL": 28.0,
-        "observationDate": "2026-03-15",
-        "provenance": "Live",
-        "testingLab": "CGWB Regional Laboratory, Lucknow"
+        "observationDate": "2024-11-15",
+        "provenance": "CGWB Regional Chemical Laboratories",
+        "testingLab": "CGWB Regional Chemical Laboratory"
     }
 
     return jsonify({
         "status": "success",
         "district_id": district.get("id"),
         "district_name": district.get("name"),
+        "state_code": district.get("stateCode", "UP"),
         "metrics": wq,
         "standards": {
             "ph": {"acceptable": "6.5 - 8.5", "permissible": "6.5 - 8.5"},
             "tds_mg_l": {"acceptable": 500, "permissible": 2000},
             "fluoride_mg_l": {"acceptable": 1.0, "permissible": 1.5},
             "arsenic_mg_l": {"acceptable": 0.01, "permissible": 0.05},
-            "nitrate_mg_l": {"acceptable": 45.0, "permissible": 45.0}
+            "nitrate_mg_l": {"acceptable": 45.0, "permissible": 45.0},
+            "uranium_mg_l": {"acceptable": 0.03, "permissible": 0.03}
         }
     })
 
@@ -203,14 +210,21 @@ def get_rainfall():
     district = data_service.get_district(district_id) or data_service.get_district("agra")
     metrics = district.get("modernWaterMetrics") or {}
 
+    actual_rf = metrics.get("rainfallActualMm", metrics.get("avgRainfallMm", 850))
+    normal_rf = metrics.get("avgRainfallMm", 850)
+    dep_pct = metrics.get("rainfallDeparturePct", -8.4)
+    monsoon_cat = metrics.get("monsoonCategory", "Deficit" if dep_pct < -19 else "Normal")
+
     return jsonify({
         "status": "success",
         "district_id": district.get("id"),
         "district_name": district.get("name"),
-        "normal_rainfall_mm": metrics.get("avgRainfallMm", 850),
-        "departure_pct": metrics.get("rainfallDeparturePct", -8.4),
-        "status_label": "Deficit" if metrics.get("rainfallDeparturePct", -8.4) < -19 else "Normal",
-        "source": "IMD District Meteorological Network & Open-Meteo Reanalysis"
+        "state_code": district.get("stateCode", "UP"),
+        "actual_rainfall_mm": actual_rf,
+        "normal_rainfall_mm": normal_rf,
+        "departure_pct": dep_pct,
+        "status_label": monsoon_cat,
+        "source": metrics.get("rainfallProvenance", "IMD District Meteorological Network & Open-Meteo Reanalysis")
     })
 
 

@@ -31,6 +31,9 @@ npm-debug.log*
 minio_data/
 timescale_data/
 redis_data/
+data/private/
+data/cache/
+*.GeoJSON
 
 # IDE & OS
 .vscode/
@@ -40,3 +43,20 @@ Thumbs.db
 
 #Scratch Inspect
 scratch_inspect/
+
+# Ignore all folders inside data/
+data/Aquifire Spread Data/
+data/cache/
+data/CGWG/
+data/District Boundaries/
+data/Ground Water Quality/
+data/private/
+data/Rainfall District wise Daily/
+data/Soil Texture/
+
+# Ignore generated/local data files
+data/data_sources.json
+data/datasetbyHF.txt
+data/indian_states_uts.json
+data/pan_india_all_districts.json
+data/up_75_districts.json

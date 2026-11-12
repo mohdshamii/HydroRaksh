@@ -380,6 +380,10 @@ class HydroGeologicalCollaborativeFiltering:
         recommendations.sort(key=lambda x: x["suitability_score"], reverse=True)
         return recommendations[:top_k]
 
+    def recommend(self, district_id: str, top_k: int = 4) -> List[Dict[str, Any]]:
+        """Alias for recommend_interventions for backward compatibility."""
+        return self.recommend_interventions(district_id, top_k=top_k)
+
     def evaluate_model(
         self,
         test_ratio: float = 0.25,

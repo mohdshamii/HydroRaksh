@@ -155,12 +155,15 @@ where $\gamma_u \in [0, 1]$ is a reliability parameter inversely proportional to
 ## IV. EXPERIMENT
 
 ### A. Experimental Setup & Datasets
-We evaluated the JalSuraksha platform on a comprehensive, multi-modal benchmark constructed across eight contiguous districts in the National Capital Region (NCR) and Western Uttar Pradesh: **Meerut, Ghaziabad, Hapur, Noida (Gautam Buddha Nagar), Greater Noida, Bulandshahr, Mathura, and Aligarh**. This region represents an ideal hydrogeological testbed characterized by severe groundwater stress, extensive agrarian extraction (sugarcane belt), and rapid industrial urbanization.
+We evaluated the JalSuraksha platform across two complementary experimental regimes: (1) a focused, deep-validation benchmark spanning eight contiguous districts in the National Capital Region (NCR) and Western Uttar Pradesh (**Meerut, Ghaziabad, Hapur, Noida/Gautam Buddha Nagar, Greater Noida, Bulandshahr, Mathura, and Aligarh**), and (2) a nationwide Pan-India production validation benchmark encompassing **780 administrative districts across all 36 States and Union Territories**.
 
-The evaluation dataset encompasses:
-1. **Piezometric Telemetry Dataset:** 10-year longitudinal records (2015–2025) comprising 184 validated monitoring stations sourced from CGWB and India-WRIS, complemented by live high-frequency telemetry from custom ESP32 ultrasonic water-table depth sensors.
-2. **Intervention Effectiveness Matrix:** 8 administrative districts across 32 candidate water management interventions, yielding an observed interaction matrix $\mathbf{R}$ with $18.4\%$ non-zero entries verified against district watershed civil work completion logs.
-3. **Hydro-Textual Corpus:** 1,280 documents comprising 8 CGWB district hydrogeology brochures, 124 CWC monthly reservoir bulletins, and 1,148 geotagged citizen incident reports recorded via the JalSuraksha public portal.
+The evaluation repository encompasses:
+1. **Pan-India Piezometric Telemetry Dataset:** Over **1,152,078 empirical observations** spanning 1991 to 2025 across 638 instrumented districts (derived from 54 state CGWB CSV archives and India-WRIS), supplemented by 10-year longitudinal records (2015–2025) across 184 intensive monitoring stations in Western UP with custom ESP32 ultrasonic telemetry sensors.
+2. **Physicochemical Water Quality Corpus:** **185,660 chemical laboratory assays** (1961–2025) evaluated against **BIS 10500:2012 Drinking Water Specifications** for pH, TDS, EC, Fluoride ($F^-$), Arsenic ($As$), Nitrate ($NO_3^-$), and Uranium ($U$).
+3. **Meteorological Precipitation Records:** **61,834 IMD daily and seasonal rainfall records** across 728 districts with standardized monsoon departure classifications.
+4. **Hydro-Geological Lithology & Administrative Cartography:** **43 Principal & Major Aquifer Systems** extracted from NAQUIM DBF registers, paired with **733 authentic Survey of India district boundaries** from `district_nwic.GeoJSON` (EPSG:7755).
+5. **Intervention Effectiveness Matrix:** 8 deep-pilot districts across 32 candidate water management civil works and demand-reduction interventions, yielding an observed interaction matrix $\mathbf{R}$ with $18.4\%$ non-zero entries verified against district watershed civil work completion logs.
+6. **Hydro-Textual Corpus:** 1,280 documents comprising 8 CGWB district hydrogeology brochures, 124 CWC monthly reservoir bulletins, and 1,148 geotagged citizen incident reports recorded via the JalSuraksha public portal.
 
 ```
        +-------------------------------------------------------------+

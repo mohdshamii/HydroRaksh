@@ -1,83 +1,116 @@
 /*
-  JalSuraksha (HydroRaksh) Production CSS Design System
-  Official Design Tokens:
-  --bg: #E8F6F8;
-  --surface: rgba(255,255,255,.75);
-  --text: #06182B;
-  --primary: #18B6C9;
-  --accent: #E9B44C;
-  --danger: #FF6B5E;
-  --safe: #2FBF8F;
-  --radius: 18px;
-  --shadow: 0 10px 30px rgba(11,60,93,.15);
-  Complete Dual-Theme Light/Dark with Glassmorphism
+  JalSuraksha — National Water Resource Intelligence Platform
+  Government-Grade Design System inspired by india.gov.in & bharatrajya.com
+  Accessible, High-Contrast, Dual-Theme (Light/Dark) UI Architecture
 */
 
 :root,
 [data-theme="light"],
 .light {
   color-scheme: light;
-  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --font-serif: "Playfair Display", "Merriweather", Georgia, serif;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-serif: "Merriweather", "Playfair Display", Georgia, serif;
 
-  /* Mandatory Prompt Design Tokens */
-  --bg: #E8F6F8;
-  --surface: rgba(255, 255, 255, 0.75);
-  --text: #06182B;
-  --primary: #18B6C9;
-  --accent: #E9B44C;
-  --danger: #FF6B5E;
-  --safe: #2FBF8F;
-  --radius: 18px;
-  --shadow: 0 10px 30px rgba(11, 60, 93, 0.15);
+  /* National Government Palette */
+  --gov-navy: #0F2E5A;
+  --gov-navy-dark: #0A1E3F;
+  --gov-navy-light: #1E3A8A;
+  --gov-blue-50: #EFF6FF;
+  --gov-blue-100: #DBEAFE;
 
-  /* Theme Tokens */
-  --bg-canvas: #E8F6F8;
-  --bg-card: rgba(255, 255, 255, 0.78);
-  --bg-elevated: rgba(255, 255, 255, 0.92);
-  --bg-subtle: rgba(232, 246, 248, 0.85);
-  --text-primary: #06182B;
-  --text-muted: #3a5369;
-  --text-faint: #6c8498;
-  --border-color: rgba(24, 182, 201, 0.22);
-  --accent-saffron: #E9B44C;
-  --accent-green: #2FBF8F;
-  --glass-blur: blur(14px);
+  /* National Tricolour Accents (Used Sparingly & Respectfully) */
+  --tricolor-saffron: #E06D10;
+  --tricolor-saffron-subtle: rgba(224, 109, 16, 0.12);
+  --tricolor-green: #127D3B;
+  --tricolor-green-subtle: rgba(18, 125, 59, 0.12);
+  --ashoka-navy: #0F2E5A;
 
-  --map-stroke: rgba(6, 24, 43, 0.22);
-  --card-border: 1px solid rgba(24, 182, 201, 0.25);
+  /* Standard Status & Severity Tokens */
+  --safe: #16A34A;
+  --safe-subtle: #DCFCE7;
+  --warning: #D97706;
+  --warning-subtle: #FEF3C7;
+  --danger: #DC2626;
+  --danger-subtle: #FEE2E2;
+  --info: #0284C7;
+  --info-subtle: #E0F2FE;
+
+  /* Light Theme Surfaces & Typography */
+  --bg-canvas: #F8FAFC;
+  --bg-card: #FFFFFF;
+  --bg-elevated: #F1F5F9;
+  --bg-subtle: #E2E8F0;
+  
+  --text-primary: #0F172A;
+  --text-muted: #334155;
+  --text-faint: #64748B;
+  
+  --border-color: #CBD5E1;
+  --border-subtle: #E2E8F0;
+  --card-border: 1px solid #CBD5E1;
+  
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-card: 0 1px 3px 0 rgba(0, 0, 0, 0.08), 0 1px 2px -1px rgba(0, 0, 0, 0.08);
+  --shadow-elevated: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -2px rgba(0, 0, 0, 0.08);
+  --shadow-modal: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+
+  --map-stroke: #94A3B8;
+  --map-hover-stroke: #E06D10;
+  --map-selected-stroke: #0F2E5A;
 }
 
 [data-theme="dark"],
 .dark {
   color-scheme: dark;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-serif: "Merriweather", "Playfair Display", Georgia, serif;
 
-  /* Mandatory Tokens Calibrated for Dark Mode Contrast */
-  --bg: #07131F;
-  --surface: rgba(14, 28, 44, 0.75);
-  --text: #E8F6F8;
-  --primary: #18B6C9;
-  --accent: #E9B44C;
-  --danger: #FF6B5E;
-  --safe: #2FBF8F;
-  --radius: 18px;
-  --shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+  /* Dark Theme Government Palette */
+  --gov-navy: #1E3A8A;
+  --gov-navy-dark: #0F2E5A;
+  --gov-navy-light: #3B82F6;
+  --gov-blue-50: #0F223D;
+  --gov-blue-100: #162E4F;
 
-  /* Theme Tokens */
-  --bg-canvas: #07131F;
-  --bg-card: rgba(14, 28, 44, 0.78);
-  --bg-elevated: rgba(22, 42, 64, 0.88);
-  --bg-subtle: rgba(10, 20, 32, 0.75);
-  --text-primary: #E8F6F8;
-  --text-muted: #8eaec2;
-  --text-faint: #59778c;
-  --border-color: rgba(24, 182, 201, 0.22);
-  --accent-saffron: #E9B44C;
-  --accent-green: #2FBF8F;
-  --glass-blur: blur(14px);
+  /* National Tricolour Accents */
+  --tricolor-saffron: #F59E0B;
+  --tricolor-saffron-subtle: rgba(245, 158, 11, 0.16);
+  --tricolor-green: #22C55E;
+  --tricolor-green-subtle: rgba(34, 197, 94, 0.16);
+  --ashoka-navy: #60A5FA;
 
-  --map-stroke: rgba(232, 246, 248, 0.2);
-  --card-border: 1px solid rgba(24, 182, 201, 0.28);
+  /* Standard Status & Severity Tokens */
+  --safe: #22C55E;
+  --safe-subtle: rgba(34, 197, 94, 0.15);
+  --warning: #F59E0B;
+  --warning-subtle: rgba(245, 158, 11, 0.15);
+  --danger: #EF4444;
+  --danger-subtle: rgba(239, 68, 68, 0.15);
+  --info: #38BDF8;
+  --info-subtle: rgba(56, 189, 248, 0.15);
+
+  /* Dark Theme Surfaces & Typography */
+  --bg-canvas: #0A192F;
+  --bg-card: #0F223D;
+  --bg-elevated: #162E4F;
+  --bg-subtle: #1E3A8A;
+
+  --text-primary: #F8FAFC;
+  --text-muted: #CBD5E1;
+  --text-faint: #94A3B8;
+
+  --border-color: #334155;
+  --border-subtle: #1E293B;
+  --card-border: 1px solid #334155;
+
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+  --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -2px rgba(0, 0, 0, 0.3);
+  --shadow-elevated: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -4px rgba(0, 0, 0, 0.4);
+  --shadow-modal: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+
+  --map-stroke: #475569;
+  --map-hover-stroke: #F59E0B;
+  --map-selected-stroke: #60A5FA;
 }
 
 * {
@@ -91,75 +124,190 @@ body {
   margin: 0;
   padding: 0;
   overflow-x: hidden;
-  transition: background-color 0.25s ease, color 0.25s ease;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
 }
 
-h1, h2, h3, .font-serif {
-  font-family: var(--font-serif);
+/* Accessibility Focus Ring */
+*:focus-visible {
+  outline: 2px solid var(--gov-navy-light);
+  outline-offset: 2px;
 }
 
-/* Glassmorphism Classes */
-.glass-panel {
-  background: var(--surface);
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
+/* Tricolour Accent Micro-Ribbon */
+.gov-tricolor-bar {
+  display: flex;
+  height: 4px;
+  width: 100%;
+}
+.gov-tricolor-bar .saffron {
+  background-color: #E06D10;
+  flex: 1;
+}
+.gov-tricolor-bar .white {
+  background-color: #FFFFFF;
+  flex: 1;
+  position: relative;
+}
+.gov-tricolor-bar .white::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background-color: #0F2E5A;
+}
+.gov-tricolor-bar .green {
+  background-color: #127D3B;
+  flex: 1;
+}
+
+/* Government Portal Utility Bar */
+.gov-top-utility {
+  background-color: #0F2E5A;
+  color: #F8FAFC;
+  font-size: 11px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.dark .gov-top-utility {
+  background-color: #0A1E3F;
+  border-bottom: 1px solid #1E293B;
+}
+
+/* Clean Government Cards & Panels */
+.gov-card {
+  background-color: var(--bg-card);
   border: var(--card-border);
+  border-radius: 8px;
+  box-shadow: var(--shadow-card);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
-.glass-card {
-  background: var(--bg-card);
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  border: var(--card-border);
-  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+.gov-card:hover {
+  border-color: var(--gov-navy-light);
 }
 
-.glass-card:hover {
-  border-color: var(--primary);
-  box-shadow: 0 14px 34px rgba(24, 182, 201, 0.18);
+.gov-panel-header {
+  border-bottom: 1px solid var(--border-color);
+  background-color: var(--bg-elevated);
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
-/* Interactive Buttons */
-.btn-primary {
-  background: linear-gradient(135deg, var(--primary) 0%, #0fa2b3 100%);
-  color: #ffffff;
-  border-radius: 12px;
-  font-weight: 700;
-  padding: 8px 16px;
-  box-shadow: 0 4px 15px rgba(24, 182, 201, 0.35);
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+/* Buttons — Accessible & Dignified */
+.btn-gov-primary {
+  background-color: var(--gov-navy);
+  color: #FFFFFF;
+  border: 1px solid var(--gov-navy-dark);
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 12px;
+  padding: 6px 14px;
   display: inline-flex;
   align-items: center;
   gap: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.btn-gov-primary:hover {
+  background-color: var(--gov-navy-light);
 }
 
-.btn-primary:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 6px 20px rgba(24, 182, 201, 0.5);
-  filter: brightness(1.08);
-}
-
-.btn-accent {
-  background: linear-gradient(135deg, var(--accent) 0%, #d89e34 100%);
-  color: #06182B;
-  border-radius: 12px;
-  font-weight: 700;
-  padding: 8px 16px;
-  box-shadow: 0 4px 15px rgba(233, 180, 76, 0.35);
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+.btn-gov-secondary {
+  background-color: var(--bg-card);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 12px;
+  padding: 6px 12px;
   display: inline-flex;
   align-items: center;
   gap: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.btn-gov-secondary:hover {
+  background-color: var(--bg-elevated);
+  border-color: var(--text-faint);
 }
 
-.btn-accent:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 6px 20px rgba(233, 180, 76, 0.5);
-  filter: brightness(1.06);
+.btn-gov-saffron {
+  background-color: var(--tricolor-saffron);
+  color: #FFFFFF;
+  border: 1px solid #B45309;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 12px;
+  padding: 6px 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.btn-gov-saffron:hover {
+  filter: brightness(1.1);
+}
+
+/* Accessible Status Badges */
+.badge-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.badge-status.safe {
+  background-color: var(--safe-subtle);
+  color: var(--safe);
+  border: 1px solid var(--safe);
+}
+.badge-status.semi-critical {
+  background-color: var(--warning-subtle);
+  color: var(--warning);
+  border: 1px solid var(--warning);
+}
+.badge-status.critical, .badge-status.over-exploited {
+  background-color: var(--danger-subtle);
+  color: var(--danger);
+  border: 1px solid var(--danger);
+}
+.badge-status.info {
+  background-color: var(--info-subtle);
+  color: var(--info);
+  border: 1px solid var(--info);
+}
+
+/* Map District SVG polygon transitions */
+.district-shape {
+  cursor: pointer;
+  stroke: var(--map-stroke);
+  stroke-width: 0.9;
+  transition: fill 0.2s ease, stroke 0.15s ease, stroke-width 0.15s ease;
+}
+
+.district-shape:hover {
+  stroke: var(--map-hover-stroke);
+  stroke-width: 2.2;
+}
+
+.district-shape.selected {
+  stroke: var(--map-selected-stroke);
+  stroke-width: 3.0;
+  filter: drop-shadow(0 0 6px rgba(15, 46, 90, 0.6));
 }
 
 /* Custom Scrollbars */
@@ -168,11 +316,11 @@ h1, h2, h3, .font-serif {
   height: 6px;
 }
 ::-webkit-scrollbar-thumb {
-  background: #24425e;
-  border-radius: 6px;
+  background: #CBD5E1;
+  border-radius: 4px;
 }
-.light ::-webkit-scrollbar-thumb {
-  background: #a9c6d3;
+.dark ::-webkit-scrollbar-thumb {
+  background: #334155;
 }
 ::-webkit-scrollbar-track {
   background: transparent;
@@ -186,124 +334,115 @@ h1, h2, h3, .font-serif {
   scrollbar-width: none;
 }
 
-/* Map District SVG polygon transitions */
-.district-shape {
-  cursor: pointer;
-  stroke: var(--map-stroke);
-  stroke-width: 0.9;
-  transition: fill 0.3s cubic-bezier(0.4, 0, 0.2, 1), stroke 0.2s ease, filter 0.2s ease, transform 0.2s ease;
-}
-
-.district-shape:hover {
-  filter: brightness(1.22);
-  stroke: var(--accent);
-  stroke-width: 2.4;
-}
-
-.district-shape.selected {
-  stroke: var(--accent);
-  stroke-width: 3.2;
-  filter: drop-shadow(0 0 12px rgba(233, 180, 76, 0.85));
-}
-
 /* Range Slider Styling */
 input[type="range"].time-slider {
   -webkit-appearance: none;
   appearance: none;
   width: 100%;
-  height: 8px;
-  border-radius: 4px;
-  background: #1c3349;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--border-color);
   outline: none;
   transition: background 0.2s;
-}
-
-.light input[type="range"].time-slider {
-  background: #c2dfe4;
 }
 
 input[type="range"].time-slider::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 22px;
-  height: 22px;
+  width: 18px;
+  height: 18px;
   border-radius: 50%;
-  background: var(--accent);
+  background: var(--gov-navy);
   cursor: pointer;
-  border: 3px solid var(--text);
-  box-shadow: 0 0 12px rgba(233, 180, 76, 0.65);
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  border: 2px solid #FFFFFF;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
+  transition: transform 0.15s ease;
 }
 
-.light input[type="range"].time-slider::-webkit-slider-thumb {
-  border-color: #ffffff;
+.dark input[type="range"].time-slider::-webkit-slider-thumb {
+  background: #60A5FA;
+  border-color: #0F223D;
 }
 
 input[type="range"].time-slider::-webkit-slider-thumb:hover {
-  transform: scale(1.18);
-  box-shadow: 0 0 18px rgba(233, 180, 76, 0.95);
+  transform: scale(1.2);
 }
 
 /* Animations */
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(6px); }
+  from { opacity: 0; transform: translateY(4px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
 .animate-fade-in {
-  animation: fadeIn 0.25s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-}
-
-@keyframes pulseGlow {
-  0%, 100% { box-shadow: 0 0 10px rgba(24, 182, 201, 0.35); }
-  50% { box-shadow: 0 0 22px rgba(24, 182, 201, 0.85); }
-}
-
-.pulse-glow {
-  animation: pulseGlow 2.5s infinite ease-in-out;
-}
-
-@keyframes ripplePulse {
-  0% { transform: scale(0.9); opacity: 0.9; }
-  100% { transform: scale(1.8); opacity: 0; }
-}
-
-.ripple-dot {
-  animation: ripplePulse 1.8s infinite cubic-bezier(0, 0.2, 0.8, 1);
+  animation: fadeIn 0.2s ease-out forwards;
 }
 
 /* Utility classes mapping to tokens */
 .bg-atlas-canvas { background-color: var(--bg-canvas); }
-.bg-atlas-card { background-color: var(--bg-card); backdrop-filter: var(--glass-blur); }
+.bg-atlas-card { background-color: var(--bg-card); }
 .bg-atlas-elevated { background-color: var(--bg-elevated); }
 .bg-atlas-subtle { background-color: var(--bg-subtle); }
 .text-atlas-text { color: var(--text-primary); }
 .text-atlas-muted { color: var(--text-muted); }
 .text-atlas-faint { color: var(--text-faint); }
 .border-atlas-border { border-color: var(--border-color); }
-.text-saffron { color: var(--accent); }
-.bg-saffron { background-color: var(--accent); }
-.text-primary-water { color: var(--primary); }
-.bg-primary-water { background-color: var(--primary); }
+.text-saffron { color: var(--tricolor-saffron); }
+.bg-saffron { background-color: var(--tricolor-saffron); }
+.text-primary-water { color: var(--gov-navy); }
+.bg-primary-water { background-color: var(--gov-navy); }
 
 /* Provenance badge styling */
 .badge-provenance-live {
-  background: rgba(47, 191, 143, 0.16);
+  background: var(--safe-subtle);
   color: var(--safe);
-  border: 1px solid rgba(47, 191, 143, 0.4);
-}
-.badge-provenance-delayed {
-  background: rgba(233, 180, 76, 0.16);
-  color: var(--accent);
-  border: 1px solid rgba(233, 180, 76, 0.4);
+  border: 1px solid var(--safe);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 700;
 }
 .badge-provenance-cached {
-  background: rgba(24, 182, 201, 0.16);
-  color: var(--primary);
-  border: 1px solid rgba(24, 182, 201, 0.4);
+  background: var(--gov-blue-50);
+  color: var(--gov-navy-light);
+  border: 1px solid var(--gov-navy);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 700;
 }
-.badge-provenance-simulated {
-  background: rgba(168, 85, 247, 0.16);
-  color: #a855f7;
-  border: 1px solid rgba(168, 85, 247, 0.4);
+.badge-provenance-delayed {
+  background: var(--warning-subtle);
+  color: var(--warning);
+  border: 1px solid var(--warning);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+/* Accessible Data Tables */
+.gov-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+.gov-table th {
+  background-color: var(--bg-elevated);
+  color: var(--text-muted);
+  font-weight: 700;
+  text-align: left;
+  padding: 8px 12px;
+  border-bottom: 2px solid var(--border-color);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.gov-table td {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border-subtle);
+  color: var(--text-primary);
+}
+.gov-table tr:hover td {
+  background-color: var(--bg-elevated);
 }
